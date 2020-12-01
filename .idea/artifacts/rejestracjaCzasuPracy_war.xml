@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="rejestracjaCzasuPracy:war">
+    <output-path>$PROJECT_DIR$/rejestracjaCzasuPracy/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>rejestracjaCzasuPracy</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="rejestracjaCzasuPracy-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="rejestracjaCzasuPracy:war exploded" />
+    </root>
+  </artifact>
+</component>
