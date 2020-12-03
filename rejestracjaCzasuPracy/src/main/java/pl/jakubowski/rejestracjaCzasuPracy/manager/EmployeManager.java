@@ -19,6 +19,10 @@ public class EmployeManager {
         return employeeRepo.findById(id);
     }
 
+    public Optional<Employee> findByCardNumber(String cardNumber){
+        return employeeRepo.findByCardNumber(cardNumber);
+    }
+
     public Iterable<Employee> findAll() {
         return employeeRepo.findAll();
     }
