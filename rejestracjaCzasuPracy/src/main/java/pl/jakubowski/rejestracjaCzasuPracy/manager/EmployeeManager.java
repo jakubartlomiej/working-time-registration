@@ -7,11 +7,11 @@ import pl.jakubowski.rejestracjaCzasuPracy.repository.EmployeeRepo;
 import java.util.Optional;
 
 @Service
-public class EmployeManager {
+public class EmployeeManager {
 
     private final EmployeeRepo employeeRepo;
 
-    public EmployeManager(EmployeeRepo employeeRepo) {
+    public EmployeeManager(EmployeeRepo employeeRepo) {
         this.employeeRepo = employeeRepo;
     }
 
@@ -19,7 +19,7 @@ public class EmployeManager {
         return employeeRepo.findById(id);
     }
 
-    public Optional<Employee> findByCardNumber(String cardNumber){
+    public Employee findByCardNumber(String cardNumber){
         return employeeRepo.findByCardNumber(cardNumber);
     }
 
