@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja czas pracy</title>
+</head>
+<body>
+<h1>Witaj <span th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></span></h1>
+<form method="post" th:action="@{/employee/{cardNumber}(cardNumber = ${employee.getCardNumber()})}">
+    <span th:if="${employee.isWork()} == true"><input type="submit" value="KONIEC"></span>
+    <span th:unless="${employee.isWork()} == true"><input type="submit" value="START"></span>
+    <button><a href="/">Powrót </a></button>
+</form>
+</body>
+</html>

@@ -7,13 +7,16 @@
 <body>
 <div>
     <h1>Zeskanuj swoją kartę:</h1>
-    <form method="post" th:action="@{/checkCardNumber}">
+    <form method="post" th:action="@{/}">
         <label for="cardNumber"></label>
         <input placeholder="Numer karty" type="text" id="cardNumber" name="cardNumber">
         <br>
         <br>
         <input type="submit" value="Szukaj">
     </form>
+    <div>
+        <span th:if="${cardNotFound} != null" th:text="${cardNotFound}"></span>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
