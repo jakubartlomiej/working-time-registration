@@ -16,7 +16,6 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:2.4.0" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-aop:2.4.0" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.3.1" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.9.6" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.4.0" />
           <element id="library" level="project" name="Maven: com.zaxxer:HikariCP:3.4.5" />
@@ -42,7 +41,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-context:5.3.1" />
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.3.1" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.3.1" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.30" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aspects:5.3.1" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:2.4.0" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter:2.4.0" />
@@ -77,6 +75,17 @@
           <element id="library" level="project" name="Maven: jakarta.activation:jakarta.activation-api:1.2.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.3.1" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.1" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-security:2.3.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.3.1" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.4.1" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.4.1" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.4.1" />
+          <element id="library" level="project" name="Maven: org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.30" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.39" />
+          <element id="library" level="project" name="Maven: org.hibernate.validator:hibernate-validator:6.1.6.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
