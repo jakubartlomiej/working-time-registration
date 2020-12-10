@@ -19,7 +19,7 @@ public class EmployeeManager {
         return employeeRepo.findById(id);
     }
 
-    public Employee findByCardNumber(String cardNumber){
+    public Optional<Employee> findByCardNumber(String cardNumber) {
         return employeeRepo.findByCardNumber(cardNumber);
     }
 
@@ -31,4 +31,7 @@ public class EmployeeManager {
         employeeRepo.save(employee);
     }
 
+    public long count() {
+        return employeeRepo.count();
+    }
 }

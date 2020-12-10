@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/topBar.css}">
     <title>Rejestracja czas pracy</title>
 </head>
 <body>
 <div>
-    <h1>Zeskanuj swoją kartę:</h1>
-    <form method="post" th:action="@{/}">
-        <label for="cardNumber"></label>
-        <input placeholder="Numer karty" type="text" id="cardNumber" name="cardNumber">
-        <br>
-        <br>
-        <input type="submit" value="Szukaj">
-    </form>
-    <div>
-        <span th:if="${cardNotFound} != null" th:text="${cardNotFound}"></span>
-    </div>
+    <div th:insert="fragments/topBar.html"></div>
+    <h1>Aplikacja do rejestracji czasu pracy</h1>
 </div>
 </body>
-<script type="text/javascript">
-    document.getElementById('cardNumber').focus();
-</script>
 </html>
