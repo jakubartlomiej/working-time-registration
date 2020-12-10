@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj użytkownika</title>
+</head>
+<body>
+<h2>Nowy użytkownik</h2>
+<div>
+    <form method="post" th:object="${employee}" th:action="@{/admin/add-user}">
+        <label th:for="firstName">Imie:</label>
+        <br>
+        <input th:field="*{firstName}">
+        <br>
+        <span th:errors="*{firstName}"></span>
+        <br>
+        <label th:for="lastName">Nazwisko:</label>
+        <br>
+        <input th:field="*{lastName}">
+        <br>
+        <span th:errors="*{lastName}"></span>
+        <br>
+        <label th:for="cardNumber">Numer karty:</label>
+        <br>
+        <input th:field="*{cardNumber}">
+        <br>
+        <span th:errors="*{cardNumber}"></span>
+        <span th:if="${uniqueErrors}">
+        <span th:if="${uniqueErrors.containsKey('cardNumberExist')}"
+              th:text="${uniqueErrors.get('cardNumberExist')}"></span>
+        </span>
+        <br>
+        <label for="myCheckBox">Użytkownik z możliwośćią logowania</label>
+        <input type="checkbox" id="myCheckBox" name="myCheckBox" onclick="showLoginAndPassword()">
+        <br>
+        <div id="loginForm" hidden th:object="${user}">
+            <label th:for="login">Login: </label>
+            <br>
+            <input th:field="*{login}">
+            <br>
+            <span th:if="${uniqueErrors}">
+            <span th:if="${uniqueErrors.containsKey('loginExist')}" th:text="${uniqueErrors.get('loginExist')}"></span>
+            <span th:if="${uniqueErrors.containsKey('loginEmpty')}" th:text="${uniqueErrors.get('loginEmpty')}"></span>
+            </span>
+            <br>
+            <label th:for="password">Hasło: </label>
+            <br>
+            <input type="password" th:field="*{password}">
+            <br>
+            <span th:if="${uniqueErrors}">
+            <span th:if="${uniqueErrors.containsKey('password')}" th:text="${uniqueErrors.get('password')}"></span>
+            </span>
+            <br>
+            <label for="roleName">Uprawnienia: </label>
+            <br>
+            <select name="roleName" id="roleName">
+                <option value="ROLE_ADMIN">Administrator</option>
+                <option value="ROLE_USER">Użytkownik</option>
+            </select>
+            <br>
+        </div>
+        <input type="submit" value="Dodaj użytkownika">
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    function showLoginAndPassword() {
+        var div = document.getElementById("loginForm");
+        var checkBox = document.getElementById("myCheckBox")
+        div.hidden = checkBox.checked !== true;
+    }
+</script>
+</html>
