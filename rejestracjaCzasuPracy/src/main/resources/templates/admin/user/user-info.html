@@ -6,12 +6,66 @@
 </head>
 <body>
 <h1>Test</h1>
-<span th:text="${employee.get().getId()}"></span><br>
-<span th:text="${employee.get().getFirstName()}"></span><br>
-<span th:text="${employee.get().getLastName()}"></span><br>
-<span th:text="${employee.get().getCardNumber()}"></span><br>
-<span th:if="${employee.get().getUser() != null}">
-<span th:text="${employee.get().getUser().getLogin()}"></span>
-</span>
+<form method="post" th:object="${employee}" th:action="@{'/admin/user/update'}">
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="text" th:field="*{id}" readonly></td>
+        </tr>
+        <tr>
+            <td>Imie:</td>
+            <td><input type="text" th:field="*{firstName}"></td>
+        </tr>
+        <tr>
+            <td>Nazwisko:</td>
+            <td><input type="text" th:field="*{lastName}"></td>
+        </tr>
+        <tr>
+            <td>Numer karty:</td>
+            <td><input type="text" th:field="*{cardNumber}"></td>
+        </tr>
+        <tr>
+            <td>Mozlowść logowania</td>
+            <td><input type="checkbox" id="myCheckBox" name="myCheckBox" onclick="showLoginAndPassword()"></td>
+        </tr>
+        <div th:object="${user}">
+            <tr>
+                <td>Login:</td>
+                <td><input type="text" id="login" th:field="*{login}"></td>
+            </tr>
+            <tr>
+                <td>Hasło:</td>
+                <td><input type="password" id="password" th:field="*{password}"></td>
+            </tr>
+            <tr>
+                <td>Uprawnienia:</td>
+                <td>
+                    <ul>
+                        <li>Adminstrator:</li>
+                        <li>Użytkownik:</li>
+                    </ul>
+                </td>
+            </tr>
+        </div>
+    </table>
+    <input type="submit" value="Zapisz">
+</form>
+<a th:href="@{'/admin/users'}">
+    <button>Powrót</button>
+</a>
 </body>
+<script type="text/javascript">
+    function showLoginAndPassword() {
+        var login = document.getElementById("login");
+        var password = document.getElementById("password");
+        var checkBox = document.getElementById("myCheckBox")
+        if (checkBox.checked === true) {
+            login.disabled = false;
+            password.disabled = false;
+        } else {
+            login.disabled = true;
+            password.disabled = true;
+        }
+    }
+</script>
 </html>
