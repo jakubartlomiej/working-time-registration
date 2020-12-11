@@ -30,7 +30,7 @@ public class Employee {
     private boolean isActive = true;
     @Column(name = "in_work")
     private boolean isWork;
-    @OneToOne()
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
