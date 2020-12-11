@@ -9,7 +9,7 @@
 <form method="post" th:action="@{/employee/{cardNumber}(cardNumber = ${employee.getCardNumber()})}">
     <span th:if="${employee.isWork()} == true"><input type="submit" value="KONIEC"></span>
     <span th:unless="${employee.isWork()} == true"><input type="submit" value="START"></span>
-    <button><a href="/">Powrót </a></button>
+    <button><a th:href="@{/employee}">Powrót </a></button>
 </form>
 </body>
 </html>

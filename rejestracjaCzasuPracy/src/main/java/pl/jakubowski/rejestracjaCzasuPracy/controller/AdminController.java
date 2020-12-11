@@ -61,7 +61,7 @@ public class AdminController {
                     model.addAttribute("uniqueErrors", errors);
                     return "admin/user/add";
                 }
-                employeeManager.addEmployee(onlyEmployee);
+                employeeManager.save(onlyEmployee);
             } else {
                 if (userManager.findByLogin(newUser.getLogin()).isPresent()) {
                     errors.put("loginExist", "Użytkownik o takim loginie już istnieje");
@@ -85,8 +85,8 @@ public class AdminController {
                 Role role = roleManager.findByRoleName(roleName).orElse(null);
                 newUser.setRoles(Collections.singletonList(role));
                 Employee employeeAndUser = new Employee(employee.getFirstName(), employee.getLastName(), employee.getCardNumber(), newUser);
-                userManager.addUser(newUser);
-                employeeManager.addEmployee(employeeAndUser);
+                userManager.save(newUser);
+                employeeManager.save(employeeAndUser);
             }
             return "redirect:/admin/users";
         }
@@ -94,8 +94,18 @@ public class AdminController {
     }
 
     @GetMapping("/user/{id}")
-    public String showEmployeeInfo(@PathVariable long id, Model model){
-        model.addAttribute("employee", employeeManager.findById(id));
+    public String showEmployeeInfo(@PathVariable long id, Model model) {
+        model.addAttribute("employee", employeeManager.findById(id).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+        model.addAttribute("user", userManager.findByEmployeeId(id).orElse(new User()));
         return "admin/user/user-info";
+    }
+
+    @PostMapping("/user/update")
+    public String updateEmployee(@ModelAttribute Employee updateEmployee, @ModelAttribute User updateUser, @RequestParam(defaultValue = "false") boolean myCheckBox) {
+        if (myCheckBox) {
+            userManager.save(updateUser);
+        }
+        employeeManager.save(updateEmployee);
+        return "redirect:/admin/users";
     }
 }
