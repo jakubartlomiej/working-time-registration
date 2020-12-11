@@ -3,6 +3,7 @@ package pl.jakubowski.rejestracjaCzasuPracy.manager;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.jakubowski.rejestracjaCzasuPracy.entity.Employee;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.User;
 import pl.jakubowski.rejestracjaCzasuPracy.repository.UserRepo;
 
@@ -28,7 +29,7 @@ public class UserManager {
         return userRepo.findByLogin(login);
     }
 
-    public void addUser(User user) {
+    public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
     }
@@ -39,5 +40,9 @@ public class UserManager {
 
     public List<User> findAll() {
        return userRepo.findAll(Sort.by(Sort.Direction.ASC, "login"));
+    }
+
+    public Optional<User> findByEmployeeId(long id){
+        return userRepo.findByEmployeeId(id);
     }
 }
