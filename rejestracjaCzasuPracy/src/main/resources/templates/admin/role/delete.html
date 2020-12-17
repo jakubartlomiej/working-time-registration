@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zabierz uprawnienia</title>
+</head>
+<body>
+<div class="container">
+    <form th:if="${user.getRoles().size()} > 0" th:object="${role}" method="post">
+        <h3>Zabierz uprawnienia użytkownikowi: </h3>
+        <select th:field="*{id}" title="role">
+            <option th:each="role : ${user.getRoles()}" th:text="${role.simplifiedRoleName}"
+                    th:value="${role.id}"></option>
+        </select>
+        <input type="submit" value="Zabierz">
+    </form>
+    <h3 th:if="${user.getRoles().size()} == 0">Użytkownik nie posiada uprawnień</h3>
+</div>
+</body>
+</html>
