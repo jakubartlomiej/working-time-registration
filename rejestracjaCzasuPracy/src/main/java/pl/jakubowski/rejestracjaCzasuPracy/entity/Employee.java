@@ -1,13 +1,7 @@
 package pl.jakubowski.rejestracjaCzasuPracy.entity;
 
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -37,7 +31,6 @@ public class Employee {
     public Employee() {
     }
 
-
     public Employee(String firstName, String lastName, String cardNumber, boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,7 +38,7 @@ public class Employee {
         this.isActive = isActive;
     }
 
-    public Employee(@Size(min = 2, max = 100, message = "Długośc od 2 do 100 znaków") String firstName, @Size(min = 2, max = 100, message = "Długośc od 2 do 100 znaków") String lastName, @NotEmpty(message = "Pole wymagane") String cardNumber, User user) {
+    public Employee(String firstName, String lastName, String cardNumber, User user) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cardNumber = cardNumber;
