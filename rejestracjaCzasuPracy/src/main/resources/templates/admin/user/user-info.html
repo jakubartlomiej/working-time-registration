@@ -15,57 +15,69 @@
         <tr>
             <td>Imie:</td>
             <td><input type="text" th:field="*{firstName}"></td>
+            <td th:errors="*{firstName}"></td>
         </tr>
         <tr>
             <td>Nazwisko:</td>
             <td><input type="text" th:field="*{lastName}"></td>
+            <td th:errors="*{lastName}"></td>
         </tr>
         <tr>
             <td>Numer karty:</td>
             <td><input type="text" th:field="*{cardNumber}"></td>
+            <td th:errors="*{cardNumber}"></td>
+            <span th:if="${uniqueErrors}">
+        <td th:if="${uniqueErrors.containsKey('cardNumberExist')}"
+            th:text="${uniqueErrors.get('cardNumberExist')}"></td>
+        </span>
         </tr>
         <tr>
-            <td>Mozlowść logowania</td>
-            <td><input type="checkbox" id="myCheckBox" name="myCheckBox" onclick="showLoginAndPassword()"></td>
+            <td><label th:for="*{active}">Karta aktywna: </label></td>
+            <td th:if="*{isActive()}">TAK</td>
+            <td th:unless="*{isActive()}">NIE</td>
         </tr>
-        <div th:object="${user}">
+        <span th:if="${employee.getUser()} != null" th:object="${user}">
             <tr>
-                <td>Login:</td>
-                <td><input type="text" id="login" th:field="*{login}"></td>
-            </tr>
-            <tr>
-                <td>Hasło:</td>
-                <td><input type="password" id="password" th:field="*{password}"></td>
+                <td><label th:for="*{login}">Login: </label></td>
+                <td>
+                    <input type="text" th:field="*{login}">
+                </td>
+                <td th:error="*{login}"></td>
+                <span th:if="${uniqueErrors}">
+            <td th:if="${uniqueErrors.containsKey('loginExist')}" th:text="${uniqueErrors.get('loginExist')}"></td>
+                </span>
             </tr>
             <tr>
                 <td>Uprawnienia:</td>
-                <td>
-                    <ul>
-                        <li>Adminstrator:</li>
-                        <li>Użytkownik:</li>
+                <td th:if="${user}!=null">
+                    <ul th:each="role : ${user.getRoles()}">
+                        <li th:text="${role.getSimplifiedRoleName()}"></li>
                     </ul>
                 </td>
             </tr>
-        </div>
+        </span>
     </table>
     <input type="submit" value="Zapisz">
 </form>
-<a th:href="@{'/admin/users'}">
+<a th:href="@{/admin/users}">
     <button>Powrót</button>
 </a>
+<a th:href="@{/admin/user/{id}/card-disabled (id = ${employee.getId()})}" th:if="${employee.isActive()}">
+    <button>Zablokuj kartę</button>
+</a>
+<a th:href="@{/admin/user/{id}/card-enabled (id = ${employee.getId()})}" th:unless="${employee.isActive()}">
+    <button>Odblokuj kartę</button>
+</a>
+<span th:if="${employee.getUser() == null}">
+            <a th:href="@{/admin/user/{id}/add-login (id = ${employee.getId()})}"><button>Utwórz login</button></a>
+</span>
+<span th:unless="${employee.getUser() == null}">
+            <a th:href="@{/admin/user/{id}/password (id = ${employee.getId()})}"><button>Resetuj hasło</button></a>
+            <a th:if="${employee.getUser().getRoles().size()} < 2"
+               th:href="@{/admin/user/{id}/role-grant (id = ${employee.getId()})}"><button>Nadaj uprawnienia</button></a>
+            <a th:if="!${employee.getUser().getRoles().isEmpty()}"
+               th:href="@{/admin/user/{id}/role-delete (id = ${employee.getId()})}"><button>Zabierz uprawnienia</button></a>
+            <a th:href="@{/admin/user/{id}/user-delete (id = ${employee.getId()})}"><button>Kasuj konto logowania</button></a>
+</span>
 </body>
-<script type="text/javascript">
-    function showLoginAndPassword() {
-        var login = document.getElementById("login");
-        var password = document.getElementById("password");
-        var checkBox = document.getElementById("myCheckBox")
-        if (checkBox.checked === true) {
-            login.disabled = false;
-            password.disabled = false;
-        } else {
-            login.disabled = true;
-            password.disabled = true;
-        }
-    }
-</script>
 </html>
