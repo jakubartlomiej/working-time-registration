@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Raport</title>
+</head>
+<body>
+<h2>Raport wejść pracowników</h2>
+<form method="post" th:action="@{/report/show}">
+    <label th:for="employeeId">Pracownik: </label>
+    <select name="employeeId" id="employeeId" required>
+        <option value="" selected disabled hidden>Wybierz pracownika</option>
+        <option th:each="employee : ${employeelist}" th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}" th:value="${employee.getId()}"></option>
+    </select>
+    <label for="dateStart">Od:</label>
+    <input type="date" required id="dateStart" name="dateStart">
+    <label for="dateEnd">Od:</label>
+    <input type="date" required id="dateEnd" name="dateEnd">
+    <input type="submit" value="Szukaj">
+</form>
+<div>
+    <table>
+        <tr>
+            <th>Pracownik</th>
+            <th>Data i godina</th>
+            <th>Akcja</th>
+        </tr>
+        <tr th:each="event : ${eventList}">
+            <td th:text="${event.getEmployee().getFirstName().concat(' ').concat(event.getEmployee().getLastName())}"></td>
+            <td th:text="${#temporals.format(event.getDate(),'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${event.getEventName()}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
