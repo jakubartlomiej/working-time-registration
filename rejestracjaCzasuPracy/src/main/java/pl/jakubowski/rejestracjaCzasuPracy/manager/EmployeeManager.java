@@ -1,5 +1,6 @@
 package pl.jakubowski.rejestracjaCzasuPracy.manager;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Employee;
 import pl.jakubowski.rejestracjaCzasuPracy.repository.EmployeeRepo;
@@ -24,14 +25,14 @@ public class EmployeeManager {
     }
 
     public Iterable<Employee> findAll() {
-        return employeeRepo.findAll();
+        return employeeRepo.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
     }
 
     public void save(Employee employee) {
         employeeRepo.save(employee);
     }
 
-    public long count() {
-        return employeeRepo.count();
+    public Iterable<Employee> findByFirstNameOrLastName(String firstName,String lastName){
+        return employeeRepo.findByFirstNameOrLastName(firstName,lastName);
     }
 }
