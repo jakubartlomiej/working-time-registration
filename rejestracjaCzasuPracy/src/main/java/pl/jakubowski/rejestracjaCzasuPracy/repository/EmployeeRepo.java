@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findByCardNumber(String cardNumber);
+    Iterable<Employee> findByFirstNameOrLastName(String firstName, String lastName);
 
 }

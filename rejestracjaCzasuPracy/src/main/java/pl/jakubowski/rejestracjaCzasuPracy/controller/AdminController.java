@@ -36,6 +36,13 @@ public class AdminController {
         return "admin/user/users";
     }
 
+    @GetMapping("/user")
+    public String searchUser(@RequestParam String search, Model model) {
+        model.addAttribute("employeesList", employeeManager.findByFirstNameOrLastName(search, search));
+        model.addAttribute("searchValue", search);
+        return "admin/user/users";
+    }
+
     @GetMapping("/add-user")
     public String addUserForm(Model model) {
         model.addAttribute("employee", new Employee());
