@@ -54,7 +54,7 @@ public class EmployeeController {
             String eventName = (employee.isWork()) ? "Wyjście" : "Wejście";
             eventManager.addEvent(new Event(employee, LocalDateTime.now(), eventName));
             employee.setWork(eventName.equalsIgnoreCase("Wejście"));
-            employeeManager.addEmployee(employee);
+            employeeManager.save(employee);
         }
         return "redirect:/employee";
     }

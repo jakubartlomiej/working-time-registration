@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja czas pracy</title>
+</head>
+<body>
+<div>
+    <h1>Zeskanuj swoją kartę:</h1>
+    <form method="post" th:action="@{/employee}">
+        <label for="cardNumber"></label>
+        <input placeholder="Numer karty" type="text" id="cardNumber" name="cardNumber">
+        <br>
+        <br>
+        <input type="submit" value="Szukaj">
+    </form>
+    <div>
+        <span th:if="${cardNotFound} != null" th:text="${cardNotFound}"></span>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    document.getElementById('cardNumber').focus();
+</script>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj użytkownika</title>
+</head>
+<body>
+<div>
+    <h2>Lista pracowników:</h2>
+    <a th:href="@{/admin/add-user}">
+        <button>DODAJ USER</button>
+    </a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Imie nazwisko</th>
+            <th>Szczegóły</th>
+        </tr>
+        <tr th:each="employee: ${employeesList}">
+            <td th:text="${employee.getId()}"></td>
+            <td th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></td>
+            <td><a th:href="@{/admin/user/{id}(id = ${employee.getId()})}"> Edytuj </a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

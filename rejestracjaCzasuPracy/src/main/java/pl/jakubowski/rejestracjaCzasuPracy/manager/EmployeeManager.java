@@ -27,7 +27,7 @@ public class EmployeeManager {
         return employeeRepo.findAll();
     }
 
-    public void addEmployee(Employee employee) {
+    public void save(Employee employee) {
         employeeRepo.save(employee);
     }
 

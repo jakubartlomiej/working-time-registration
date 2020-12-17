@@ -18,6 +18,6 @@ public class MyUserDetailsManager implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return userRepo.findByLogin(login).orElseThrow(() -> new RuntimeException("Nie znaleziono logiu: " + login));
+        return userRepo.findByLogin(login).orElseThrow(() -> new RuntimeException("Nie znaleziono loginu: " + login));
     }
 }

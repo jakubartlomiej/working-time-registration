@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nadawanie loginu</title>
+</head>
+<body>
+<h2>Dodaj login dla użytkownika <span
+        th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></span></h2>
+<form method="post" th:object="${user}" th:action="@{/admin/user/{id}/add-login (id=${employee.getId()})}">
+    <table>
+        <tr>
+            <td><label th:for="*{login}">Login: </label></td>
+            <td><input th:field="*{login}"></td>
+            <td th:if="${loginExist} != null" th:text="${loginExist}"></td>
+            <td th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></td>
+        </tr>
+        <tr>
+            <td><label th:for="*{password}">Hasło: </label></td>
+            <td><input type="password" th:field="*{password}"></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+        </tr>
+        <tr>
+            <td><label for="roleName">Uprawneinia: </label></td>
+            <td><select name="roleName" id="roleName">
+                <option value="ROLE_ADMIN">Administrator</option>
+                <option value="ROLE_USER">Użytkownik</option>
+            </select></td>
+        </tr>
+    </table>
+    <input type="submit" value="Zapisz">
+</form>
+<a th:href="@{/admin/user/{id} (id=${employee.getId()})}">
+    <button>Powrót</button>
+</a>
+</body>
+</html>

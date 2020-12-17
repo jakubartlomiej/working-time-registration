@@ -35,7 +35,7 @@ public class Start implements CommandLineRunner {
             user.setPassword("admin123");
             user.setRoles(new ArrayList<>());
             user.getRoles().add(role_admin.orElse(null));
-            userManager.addUser(user);
+            userManager.save(user);
         }
     }
 }
