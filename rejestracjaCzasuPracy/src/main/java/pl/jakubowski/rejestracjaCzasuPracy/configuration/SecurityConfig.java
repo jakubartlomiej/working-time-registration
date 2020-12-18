@@ -7,20 +7,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.MyUserDetailsManager;
+import pl.jakubowski.rejestracjaCzasuPracy.service.MyUserDetailsService;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final MyUserDetailsManager myUserDetailsManager;
+    private final MyUserDetailsService myUserDetailsService;
 
-    public SecurityConfig(MyUserDetailsManager myUserDetailsManager) {
-        this.myUserDetailsManager = myUserDetailsManager;
+    public SecurityConfig(MyUserDetailsService myUserDetailsService) {
+        this.myUserDetailsService = myUserDetailsService;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsManager);
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Override

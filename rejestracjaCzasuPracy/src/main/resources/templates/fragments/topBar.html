@@ -10,10 +10,10 @@
     <div class="container">
         <ul>
             <li sec:authorize="hasRole('ADMIN')">
-                <a th:href="@{/admin/users}">Admin</a>
+                <a th:href="@{/admin/users}">Panel administratora</a>
             </li>
             <li sec:authorize="hasRole('USER')">
-                Panel USERA
+                <a th:href="@{/report/show}">Panel użytkownika</a>
             </li>
             <li sec:authorize="isAnonymous()">
                 <a th:href="@{/login}">Zaloguj się</a>
@@ -24,6 +24,5 @@
         </ul>
     </div>
 </nav>
-
 </body>
 </html>
