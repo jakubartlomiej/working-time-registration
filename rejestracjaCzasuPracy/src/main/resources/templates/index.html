@@ -2,13 +2,15 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/topBar.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:include="fragments/topBar :: header"></th:block>
     <title>Rejestracja czas pracy</title>
 </head>
 <body>
-<div>
-    <div th:insert="fragments/topBar.html"></div>
+<nav th:replace="fragments/topBar :: navbar"></nav>
+<div class="container">
     <h1>Aplikacja do rejestracji czasu pracy</h1>
 </div>
+<div th:replace="fragments/topBar :: scripts"></div>
 </body>
 </html>
