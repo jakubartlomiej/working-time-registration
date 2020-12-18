@@ -1,19 +1,18 @@
-package pl.jakubowski.rejestracjaCzasuPracy.manager;
+package pl.jakubowski.rejestracjaCzasuPracy.service;
 
 import org.springframework.stereotype.Service;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Event;
 import pl.jakubowski.rejestracjaCzasuPracy.repository.EventRepo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class EventManager {
+public class EventService {
 
     private final EventRepo eventRepo;
 
-    public EventManager(EventRepo eventRepo) {
+    public EventService(EventRepo eventRepo) {
         this.eventRepo = eventRepo;
     }
 

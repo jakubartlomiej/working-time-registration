@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Employee;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Event;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.EmployeeManager;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.EventManager;
+import pl.jakubowski.rejestracjaCzasuPracy.service.EmployeeService;
+import pl.jakubowski.rejestracjaCzasuPracy.service.EventService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,12 +17,12 @@ import java.util.Optional;
 @Controller
 public class EmployeeController {
 
-    private final EmployeeManager employeeManager;
-    private final EventManager eventManager;
+    private final EmployeeService employeeService;
+    private final EventService eventService;
 
-    public EmployeeController(EmployeeManager employeeManager, EventManager eventManager) {
-        this.employeeManager = employeeManager;
-        this.eventManager = eventManager;
+    public EmployeeController(EmployeeService employeeService, EventService eventService) {
+        this.employeeService = employeeService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/employee")
@@ -32,7 +32,7 @@ public class EmployeeController {
 
     @PostMapping("/employee")
     public String findEmployee(@RequestParam(value = "cardNumber") String cardNumber, Model model) {
-        Optional<Employee> employee = employeeManager.findByCardNumber(cardNumber);
+        Optional<Employee> employee = employeeService.findByCardNumber(cardNumber);
         if (employee.isPresent() && employee.get().isActive()) {
             return "redirect:/employee/" + cardNumber;
         } else {
@@ -43,18 +43,18 @@ public class EmployeeController {
 
     @GetMapping("/employee/{cardNumber}")
     public String getEmployeeInfo(@PathVariable String cardNumber, Model model) {
-        model.addAttribute("employee", employeeManager.findByCardNumber(cardNumber).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
+        model.addAttribute("employee", employeeService.findByCardNumber(cardNumber).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
         return "employee/info";
     }
 
     @PostMapping("/employee/{cardNumber}")
     public String submitEvent(@PathVariable String cardNumber) {
-        if (employeeManager.findByCardNumber(cardNumber).isPresent()) {
-            Employee employee = employeeManager.findByCardNumber(cardNumber).get();
+        if (employeeService.findByCardNumber(cardNumber).isPresent()) {
+            Employee employee = employeeService.findByCardNumber(cardNumber).get();
             String eventName = (employee.isWork()) ? "Wyjście" : "Wejście";
-            eventManager.addEvent(new Event(employee, LocalDateTime.now(), eventName));
+            eventService.addEvent(new Event(employee, LocalDateTime.now(), eventName));
             employee.setWork(eventName.equalsIgnoreCase("Wejście"));
-            employeeManager.save(employee);
+            employeeService.save(employee);
         }
         return "redirect:/employee";
     }

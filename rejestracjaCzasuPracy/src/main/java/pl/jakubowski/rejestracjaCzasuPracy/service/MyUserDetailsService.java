@@ -1,4 +1,4 @@
-package pl.jakubowski.rejestracjaCzasuPracy.manager;
+package pl.jakubowski.rejestracjaCzasuPracy.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,11 +8,11 @@ import pl.jakubowski.rejestracjaCzasuPracy.repository.UserRepo;
 
 
 @Service
-public class MyUserDetailsManager implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepo userRepo;
 
-    public MyUserDetailsManager(UserRepo userRepo) {
+    public MyUserDetailsService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 

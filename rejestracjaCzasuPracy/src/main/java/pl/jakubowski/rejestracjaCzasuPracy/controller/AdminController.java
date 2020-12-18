@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Employee;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Role;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.User;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.EmployeeManager;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.RoleManager;
-import pl.jakubowski.rejestracjaCzasuPracy.manager.UserManager;
+import pl.jakubowski.rejestracjaCzasuPracy.service.EmployeeService;
+import pl.jakubowski.rejestracjaCzasuPracy.service.RoleService;
+import pl.jakubowski.rejestracjaCzasuPracy.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -20,25 +20,25 @@ import java.util.HashMap;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserManager userManager;
-    private final RoleManager roleManager;
-    private final EmployeeManager employeeManager;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final EmployeeService employeeService;
 
-    public AdminController(UserManager userManager, RoleManager roleManager, EmployeeManager employeeManager) {
-        this.userManager = userManager;
-        this.roleManager = roleManager;
-        this.employeeManager = employeeManager;
+    public AdminController(UserService userService, RoleService roleService, EmployeeService employeeService) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/users")
     public String getUserList(Model model) {
-        model.addAttribute("employeesList", employeeManager.findAll());
+        model.addAttribute("employeesList", employeeService.findAll());
         return "admin/user/users";
     }
 
     @GetMapping("/user")
     public String searchUser(@RequestParam String search, Model model) {
-        model.addAttribute("employeesList", employeeManager.findByFirstNameOrLastName(search, search));
+        model.addAttribute("employeesList", employeeService.findByFirstNameOrLastName(search, search));
         model.addAttribute("searchValue", search);
         return "admin/user/users";
     }
@@ -56,7 +56,7 @@ public class AdminController {
         boolean error = false;
         HashMap<String, String> errors = new HashMap<>();
         if (employee != null) {
-            if (employeeManager.findByCardNumber(employee.getCardNumber()).isPresent()) {
+            if (employeeService.findByCardNumber(employee.getCardNumber()).isPresent()) {
                 errors.put("cardNumberExist", "Podany numer karty istnieje w systemie");
                 error = true;
             }
@@ -69,9 +69,9 @@ public class AdminController {
                     model.addAttribute("uniqueErrors", errors);
                     return "admin/user/add";
                 }
-                employeeManager.save(onlyEmployee);
+                employeeService.save(onlyEmployee);
             } else {
-                if (userManager.findByLogin(newUser.getLogin()).isPresent()) {
+                if (userService.findByLogin(newUser.getLogin()).isPresent()) {
                     errors.put("loginExist", "Użytkownik o takim loginie już istnieje");
                     error = true;
                 }
@@ -90,11 +90,11 @@ public class AdminController {
                     model.addAttribute("uniqueErrors", errors);
                     return "admin/user/add";
                 }
-                Role role = roleManager.findByRoleName(roleName).orElse(null);
+                Role role = roleService.findByRoleName(roleName).orElse(null);
                 newUser.setRoles(Collections.singletonList(role));
                 Employee employeeAndUser = new Employee(employee.getFirstName(), employee.getLastName(), employee.getCardNumber(), newUser);
-                userManager.save(newUser);
-                employeeManager.save(employeeAndUser);
+                userService.save(newUser);
+                employeeService.save(employeeAndUser);
             }
             return "redirect:/admin/users";
         }
@@ -103,8 +103,8 @@ public class AdminController {
 
     @GetMapping("/user/{id}")
     public String showEmployeeInfo(@PathVariable long id, Model model) {
-        model.addAttribute("employee", employeeManager.findById(id).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
-        model.addAttribute("user", userManager.findByEmployeeId(id).orElse(new User()));
+        model.addAttribute("employee", employeeService.findById(id).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+        model.addAttribute("user", userService.findByEmployeeId(id).orElse(new User()));
         return "admin/user/user-info";
     }
 
@@ -113,8 +113,8 @@ public class AdminController {
         boolean error = false;
         HashMap<String, String> errors = new HashMap<>();
         if (updateUser != null) {
-            if (userManager.findByLogin(updateUser.getLogin()).isPresent()) {
-                if (!userManager.findByLogin(updateUser.getLogin()).get().getUsername().equals(updateUser.getLogin())) {
+            if (userService.findByLogin(updateUser.getLogin()).isPresent()) {
+                if (!userService.findByLogin(updateUser.getLogin()).get().getUsername().equals(updateUser.getLogin())) {
                     errors.put("loginExist", "Użytkownik o takim loginie już istnieje");
                     error = true;
                 }
@@ -126,13 +126,13 @@ public class AdminController {
                 model.addAttribute("uniqueErrors", errors);
                 return "admin/user/user-info";
             }
-            if (userManager.findByEmployeeId(updateEmployee.getId()).isPresent()) {
-                User user = userManager.findByEmployeeId(updateEmployee.getId()).get();
-                userManager.updateLoginForId(updateUser.getLogin(), user.getId());
+            if (userService.findByEmployeeId(updateEmployee.getId()).isPresent()) {
+                User user = userService.findByEmployeeId(updateEmployee.getId()).get();
+                userService.updateLoginForId(updateUser.getLogin(), user.getId());
             }
         } else {
-            if (employeeManager.findByCardNumber(updateEmployee.getCardNumber()).isPresent()) {
-                if (!employeeManager.findByCardNumber(updateEmployee.getCardNumber()).get().getCardNumber().equals(updateEmployee.getCardNumber())) {
+            if (employeeService.findByCardNumber(updateEmployee.getCardNumber()).isPresent()) {
+                if (!employeeService.findByCardNumber(updateEmployee.getCardNumber()).get().getCardNumber().equals(updateEmployee.getCardNumber())) {
                     errors.put("cardNumberExist", "Podany numer karty istnieje w systemie");
                     error = true;
                 }
@@ -145,19 +145,19 @@ public class AdminController {
                 return "admin/user/user-info";
             }
         }
-        if (employeeManager.findById(updateEmployee.getId()).isPresent()) {
-            Employee employee = employeeManager.findById(updateEmployee.getId()).get();
+        if (employeeService.findById(updateEmployee.getId()).isPresent()) {
+            Employee employee = employeeService.findById(updateEmployee.getId()).get();
             employee.setFirstName(updateEmployee.getFirstName());
             employee.setLastName(updateEmployee.getLastName());
             employee.setCardNumber(updateEmployee.getCardNumber());
-            employeeManager.save(employee);
+            employeeService.save(employee);
         }
         return "redirect:/admin/users";
     }
 
     @GetMapping("/user/{employeeId}/add-login")
     public String addLoginForm(@PathVariable long employeeId, Model model) {
-        model.addAttribute("employee", employeeManager.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
         model.addAttribute("user", new User());
         return "admin/user/add-login";
     }
@@ -165,7 +165,7 @@ public class AdminController {
     @PostMapping("user/{employeeId}/add-login")
     public String submitLoginUser(@ModelAttribute @Valid User user, BindingResult bindingResult, @PathVariable long employeeId, @RequestParam String roleName, Model model) {
         boolean error = false;
-        if (userManager.findByLogin(user.getLogin()).isPresent()) {
+        if (userService.findByLogin(user.getLogin()).isPresent()) {
             error = true;
             model.addAttribute("loginExist", "Taki login już isteniej");
         }
@@ -174,23 +174,23 @@ public class AdminController {
         }
 
         if (error) {
-            model.addAttribute("employee", employeeManager.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+            model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
             return "admin/user/add-login";
         }
-        Role role = roleManager.findByRoleName(roleName).orElse(null);
+        Role role = roleService.findByRoleName(roleName).orElse(null);
         user.setRoles(Collections.singletonList(role));
-        userManager.save(user);
-        if (employeeManager.findById(employeeId).isPresent()) {
-            Employee employee = employeeManager.findById(employeeId).get();
+        userService.save(user);
+        if (employeeService.findById(employeeId).isPresent()) {
+            Employee employee = employeeService.findById(employeeId).get();
             employee.setUser(user);
-            employeeManager.save(employee);
+            employeeService.save(employee);
         }
         return "redirect:/admin/user/" + employeeId;
     }
 
     @GetMapping("/user/{employeeId}/password")
     public String resetPasswordForm(@PathVariable long employeeId, Model model) {
-        model.addAttribute("user", userManager.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
+        model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
         return "admin/password/password";
     }
 
@@ -198,13 +198,13 @@ public class AdminController {
     public String subminPasswordReset(@RequestParam @Min(value = 8, message = "Minimum 8 znaków") String newPassword, @PathVariable long employeeId, Model model) {
         if (newPassword.length() < 8) {
             model.addAttribute("error", "Minimum 8 znaków");
-            model.addAttribute("user", userManager.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
+            model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
             return "admin/password/password";
         } else {
-            if (userManager.findByEmployeeId(employeeId).isPresent()) {
-                User user = userManager.findByEmployeeId(employeeId).get();
+            if (userService.findByEmployeeId(employeeId).isPresent()) {
+                User user = userService.findByEmployeeId(employeeId).get();
                 user.setPassword(newPassword);
-                userManager.save(user);
+                userService.save(user);
             }
         }
         return "redirect:/admin/user/" + employeeId;
@@ -212,46 +212,46 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/role-grant")
     public String grantRoleForm(@PathVariable long employeeId, Model model) {
-        model.addAttribute("roles", roleManager.findRoleToGrantByEmployeeId(employeeId));
+        model.addAttribute("roles", roleService.findRoleToGrantByEmployeeId(employeeId));
         model.addAttribute("role", new Role());
         return "admin/role/grant";
     }
 
     @PostMapping("/user/{employeeId}/role-grant")
     public String submitGrantRole(@PathVariable long employeeId, Role role) {
-        userManager.addRole(role, employeeId);
+        userService.addRole(role, employeeId);
         return "redirect:/admin/user/" + employeeId;
     }
 
     @GetMapping("/user/{employeeId}/role-delete")
     public String deleteRoleForm(Model model, @PathVariable long employeeId) {
-        model.addAttribute("user", userManager.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
+        model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
         model.addAttribute("role", new Role());
         return "admin/role/delete";
     }
 
     @PostMapping("/user/{employeeId}/role-delete")
     public String submitDeleteRole(@PathVariable long employeeId, Role role) {
-        userManager.deleteRole(role, employeeId);
+        userService.deleteRole(role, employeeId);
         return "redirect:/admin/user/" + employeeId;
     }
 
     @GetMapping("/user/{employeeId}/user-delete")
     public String confirmDeleteUser(@PathVariable long employeeId, Model model) {
-        model.addAttribute("user", userManager.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
+        model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
         return "admin/user/delete";
     }
 
     @PostMapping("/user/{employeeId}/user-delete")
     public String deleteUserAccount(@PathVariable long employeeId) {
-        if (employeeManager.findById(employeeId).isPresent()) {
-            Employee employee = employeeManager.findById(employeeId).get();
-            if (userManager.findByEmployeeId(employeeId).isPresent()) {
+        if (employeeService.findById(employeeId).isPresent()) {
+            Employee employee = employeeService.findById(employeeId).get();
+            if (userService.findByEmployeeId(employeeId).isPresent()) {
                 long tempUserId = employee.getUser().getId();
                 employee.setUser(null);
-                employeeManager.save(employee);
-                userManager.deleteAllRole(tempUserId);
-                userManager.deleteById(tempUserId);
+                employeeService.save(employee);
+                userService.deleteAllRole(tempUserId);
+                userService.deleteById(tempUserId);
 
             }
         }
@@ -260,20 +260,20 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/card-disabled")
     public String disabledCard(@PathVariable long employeeId) {
-        Employee employee = employeeManager.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony"));
+        Employee employee = employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony"));
         if (employee != null) {
             employee.setActive(false);
-            employeeManager.save(employee);
+            employeeService.save(employee);
         }
         return "redirect:/admin/user/" + employeeId;
     }
 
     @GetMapping("/user/{employeeId}/card-enabled")
     public String enabledCard(@PathVariable long employeeId) {
-        Employee employee = employeeManager.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony"));
+        Employee employee = employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony"));
         if (employee != null) {
             employee.setActive(true);
-            employeeManager.save(employee);
+            employeeService.save(employee);
         }
         return "redirect:/admin/user/" + employeeId;
     }

@@ -1,4 +1,4 @@
-package pl.jakubowski.rejestracjaCzasuPracy.manager;
+package pl.jakubowski.rejestracjaCzasuPracy.service;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RoleManager {
+public class RoleService {
 
     private final RoleRepo roleRepo;
     private final UserRepo userRepo;
 
-    public RoleManager(RoleRepo roleRepo, UserRepo userRepo) {
+    public RoleService(RoleRepo roleRepo, UserRepo userRepo) {
         this.roleRepo = roleRepo;
         this.userRepo = userRepo;
     }

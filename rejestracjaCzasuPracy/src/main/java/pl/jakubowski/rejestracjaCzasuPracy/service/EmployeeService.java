@@ -1,4 +1,4 @@
-package pl.jakubowski.rejestracjaCzasuPracy.manager;
+package pl.jakubowski.rejestracjaCzasuPracy.service;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -8,11 +8,11 @@ import pl.jakubowski.rejestracjaCzasuPracy.repository.EmployeeRepo;
 import java.util.Optional;
 
 @Service
-public class EmployeeManager {
+public class EmployeeService {
 
     private final EmployeeRepo employeeRepo;
 
-    public EmployeeManager(EmployeeRepo employeeRepo) {
+    public EmployeeService(EmployeeRepo employeeRepo) {
         this.employeeRepo = employeeRepo;
     }
 
