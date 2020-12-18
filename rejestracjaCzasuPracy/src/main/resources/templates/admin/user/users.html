@@ -7,9 +7,15 @@
 <body>
 <div>
     <h2>Lista pracowników:</h2>
-    <a th:href="@{/admin/add-user}">
-        <button>DODAJ USER</button>
-    </a>
+    <form method="get" th:action="@{/admin/user}">
+        <label for="search">Szukaj:</label>
+        <input type="text" id="search" name="search">
+        <input type="submit" value="Szukaj">
+    </form>
+    <span th:if="${searchValue}!=null">
+        Wynik wyszukiwania dla '<b><span th:text="${searchValue}"></span></b>'
+        <a th:href="@{/admin/users}">Usuń filtr</a>
+    </span>
     <table>
         <tr>
             <th>ID</th>
