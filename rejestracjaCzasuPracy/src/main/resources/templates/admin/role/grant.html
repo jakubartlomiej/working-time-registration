@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pl">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Dodaj uprawnienia</title>
 </head>
 <body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<br>
     <div class="container">
-
+        <h3>Dodawanie uprawnień</h3>
         <form th:if="${roles.size()} > 0" th:object="${role}" method="post">
-
-            <h3>Nadaj uprawnienia użytkownikowi: </h3>
-            <select th:field="*{id}" title="role">
-                <option th:each="role : ${roles}" th:text="${role.simplifiedRoleName}" th:value="${role.id}"></option>
-            </select>
-            <input type="submit" value="Dodaj">
-
+            <div class="form-group row">
+                <label th:for="role" class="col-sm-2 col-form-label">Dodaj uprawnienia:</label>
+                <div class="col-sm-10">
+                    <select th:field="*{id}" title="role">
+                        <option th:each="role : ${roles}" th:text="${role.simplifiedRoleName}" th:value="${role.id}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="float-left">
+                <input class="btn btn-primary" type="submit" value="Dodaj">
+                <a class="btn btn-primary" th:href="@{/admin/user/{id} (id=${employee.getId()})}">Powrót</a>
+            </div>
         </form>
-
-        <h3 th:if="${roles.size()} == 0">Wszystkie uprawnienia zostały nadane temu użytkownikowi</h3>
-
+        <h3 th:if="${roles.size()} == 0">Wszystkie uprawnienia zostały dodane</h3>
     </div>
 </body>
 </html>
