@@ -27,9 +27,12 @@
         </tr>
         </thead>
         <tr th:each="employee: ${employeesList}">
-            <td th:text="${employee.getId()}"></td>
-            <td th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></td>
-            <td><a th:href="@{/admin/user/{id}(id = ${employee.getId()})}"><button type="button" class="btn btn-info">Edytuj</button></a></td>
+            <td class="text-center" th:text="${employee.getId()}"></td>
+            <td class="text-center"
+                th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></td>
+            <td class="text-center"><a th:href="@{/admin/user/{id}(id = ${employee.getId()})}">
+                <button type="button" class="btn btn-info">Edytuj</button>
+            </a></td>
         </tr>
     </table>
 </div>
