@@ -1,67 +1,92 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Dodaj użytkownika</title>
 </head>
 <body>
-<h2>Nowy użytkownik</h2>
-<div>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <br>
+    <h2>Nowy pracownik</h2>
+    <br>
     <form method="post" th:object="${employee}" th:action="@{/admin/add-user}">
-        <label th:for="firstName">Imie:</label>
-        <br>
-        <input th:field="*{firstName}">
-        <br>
-        <span th:errors="*{firstName}"></span>
-        <br>
-        <label th:for="lastName">Nazwisko:</label>
-        <br>
-        <input th:field="*{lastName}">
-        <br>
-        <span th:errors="*{lastName}"></span>
-        <br>
-        <label th:for="cardNumber">Numer karty:</label>
-        <br>
-        <input th:field="*{cardNumber}">
-        <br>
-        <span th:errors="*{cardNumber}"></span>
-        <span th:if="${uniqueErrors}">
-        <span th:if="${uniqueErrors.containsKey('cardNumberExist')}"
-              th:text="${uniqueErrors.get('cardNumberExist')}"></span>
-        </span>
-        <br>
-        <label for="myCheckBox">Użytkownik z możliwośćią logowania</label>
-        <input type="checkbox" id="myCheckBox" name="myCheckBox" onclick="showLoginAndPassword()">
-        <br>
-        <div id="loginForm" hidden th:object="${user}">
-            <label th:for="login">Login: </label>
-            <br>
-            <input th:field="*{login}">
-            <br>
-            <span th:if="${uniqueErrors}">
-            <span th:if="${uniqueErrors.containsKey('loginExist')}" th:text="${uniqueErrors.get('loginExist')}"></span>
-            <span th:if="${uniqueErrors.containsKey('loginEmpty')}" th:text="${uniqueErrors.get('loginEmpty')}"></span>
-            </span>
-            <br>
-            <label th:for="password">Hasło: </label>
-            <br>
-            <input type="password" th:field="*{password}">
-            <br>
-            <span th:if="${uniqueErrors}">
-            <span th:if="${uniqueErrors.containsKey('password')}" th:text="${uniqueErrors.get('password')}"></span>
-            </span>
-            <br>
-            <label for="roleName">Uprawnienia: </label>
-            <br>
-            <select name="roleName" id="roleName">
-                <option value="ROLE_ADMIN">Administrator</option>
-                <option value="ROLE_USER">Użytkownik</option>
-            </select>
-            <br>
+        <div class="form-group row">
+            <label th:for="firstName" class="col-sm-2 col-form-label">Imie:</label>
+            <div class="col-sm-10">
+                <input th:field="*{firstName}" class="form-control">
+                <span th:errors="*{firstName}"></span>
+            </div>
         </div>
-        <input type="submit" value="Dodaj użytkownika">
+        <div class="form-group row">
+            <label th:for="lastName" class="col-sm-2 col-form-label">Nazwisko:</label>
+            <div class="col-sm-10">
+                <input class="form-control" th:field="*{lastName}">
+                <span th:errors="*{lastName}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" th:for="cardNumber">Numer karty:</label>
+            <div class="col-sm-10">
+                <input class="form-control" th:field="*{cardNumber}" id="cardNumber">
+                <span th:errors="*{cardNumber}"></span>
+                <span th:if="${uniqueErrors}">
+                <span th:if="${uniqueErrors.containsKey('cardNumberExist')}"
+                      th:text="${uniqueErrors.get('cardNumberExist')}"></span>
+            </span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="myCheckBox">Pracownik z możliwością logowania</label>
+            <div class="col-sm-1">
+                <input class="form-control" type="checkbox" id="myCheckBox" name="myCheckBox"
+                       onclick="showLoginAndPassword()">
+            </div>
+        </div>
+        <div id="loginForm" hidden th:object="${user}">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" th:for="login">Login: </label>
+                <div class="col-sm-10">
+                    <input class="form-control" th:field="*{login}">
+                    <span th:if="${uniqueErrors}">
+                    <span th:if="${uniqueErrors.containsKey('loginExist')}"
+                          th:text="${uniqueErrors.get('loginExist')}"></span>
+                    <span th:if="${uniqueErrors.containsKey('loginEmpty')}"
+                          th:text="${uniqueErrors.get('loginEmpty')}"></span>
+                </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" th:for="password">Hasło: </label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="password" th:field="*{password}">
+                    <span th:if="${uniqueErrors}">
+                    <span th:if="${uniqueErrors.containsKey('password')}"
+                          th:text="${uniqueErrors.get('password')}"></span>
+                </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" for="roleName">Uprawnienia: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="roleName" id="roleName">
+                        <option value="ROLE_ADMIN">Administrator</option>
+                        <option value="ROLE_USER">Użytkownik</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="float-right">
+            <input class="btn btn-primary" type="submit" value="Dodaj użytkownika">
+        </div>
     </form>
 </div>
+<br>
+<br>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </body>
 <script type="text/javascript">
     function showLoginAndPassword() {
@@ -69,5 +94,13 @@
         var checkBox = document.getElementById("myCheckBox")
         div.hidden = checkBox.checked !== true;
     }
+
+    //function blocking auto submit after card number scanning
+    $('#cardNumber').keydown(function (e) {
+        if (e.keyCode === 13) {
+            $('#cardNumber').focus();
+            return false;
+        }
+    });
 </script>
 </html>

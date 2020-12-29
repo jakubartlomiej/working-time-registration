@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
 </head>
 <body>
-$END$
+<footer th:fragment="footer" class="bg-light text-center text-lg-start">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;">
+        © 2020 Copyright: Bartłomiej Jakubowski
+    </div>
+</footer>
 </body>
 </html>

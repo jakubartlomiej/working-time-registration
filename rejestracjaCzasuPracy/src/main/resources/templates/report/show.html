@@ -10,7 +10,7 @@
     <label th:for="employeeId">Pracownik: </label>
     <select name="employeeId" id="employeeId" required>
         <option value="" selected disabled hidden>Wybierz pracownika</option>
-        <option th:each="employee : ${employeelist}" th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}" th:value="${employee.getId()}"></option>
+        <option th:each="employee : ${employeeList}" th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}" th:value="${employee.getId()}"></option>
     </select>
     <label for="dateStart">Od:</label>
     <input type="date" required id="dateStart" name="dateStart">

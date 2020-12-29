@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
 </head>
 <body>
-$END$
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="mx-auto order-0">
+        <ul class="nav justify-content-center">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Panel administratora</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" th:href="@{'/admin/add-user'}">Dodaj pracownika</a>
+                    <a class="dropdown-item" th:href="@{'/admin/users'}">Lista pracowników</a>
+                </div>
+            </li>
+            <li sec:authorize="hasRole('USER')" class="nav-item">
+                <a class="nav-link" th:href="@{/report/show}">Raport</a>
+            </li>
+        </ul>
+        </div>
+        <div class="mx-auto order-0">
+        <ul class="navbar-nav">
+            <li sec:authorize="isAnonymous()" class="nav-item">
+                <a class="nav-link" th:href="@{/login}">
+                    <button class="btn btn-outline-success my-2 my-sm-0">Zaloguj się</button>
+                </a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item mr-sm-2">
+                <a class="nav-link" th:href="@{/logout}">
+                    <button class="btn btn-outline-danger my-2 my-sm-0">Wyloguj</button>
+                </a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav>
 </body>
 </html>
