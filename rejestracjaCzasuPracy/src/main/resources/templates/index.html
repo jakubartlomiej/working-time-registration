@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <th:block th:include="fragments/topBar :: header"></th:block>
+    <th:block th:include="fragments/header :: header"></th:block>
     <title>Rejestracja czas pracy</title>
 </head>
 <body>
-<nav th:replace="fragments/topBar :: navbar"></nav>
+<nav th:replace="fragments/navbar :: navbar"></nav>
 <div class="container">
     <h1>Aplikacja do rejestracji czasu pracy</h1>
 </div>
-<div th:replace="fragments/topBar :: scripts"></div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>
