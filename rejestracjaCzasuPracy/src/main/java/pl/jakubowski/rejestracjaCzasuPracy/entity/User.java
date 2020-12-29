@@ -17,6 +17,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     @Size(min = 2,message = "Pole wymagane")
     private String login;
     @Size(min = 8, message = "Minimum 8 znaków")

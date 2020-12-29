@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Rejestracja czas pracy</title>
 </head>
 <body>
-<div>
+<div class="container">
+    <br>
+    <br>
     <h1>Zeskanuj swoją kartę:</h1>
+    <br>
     <form method="post" th:action="@{/employee}">
+        <div class="form-group">
         <label for="cardNumber"></label>
-        <input placeholder="Numer karty" type="text" id="cardNumber" name="cardNumber">
-        <br>
-        <br>
-        <input type="submit" value="Szukaj">
+        <input class="form-control" placeholder="Numer karty" type="text" id="cardNumber" name="cardNumber">
+        </div>
+        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Szukaj">
     </form>
     <div>
         <span th:if="${cardNotFound} != null" th:text="${cardNotFound}"></span>
     </div>
 </div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 <script type="text/javascript">
     document.getElementById('cardNumber').focus();

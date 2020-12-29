@@ -101,38 +101,50 @@ public class AdminController {
         return "admin/user/add";
     }
 
-    @GetMapping("/user/{id}")
-    public String showEmployeeInfo(@PathVariable long id, Model model) {
-        model.addAttribute("employee", employeeService.findById(id).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
-        model.addAttribute("user", userService.findByEmployeeId(id).orElse(new User()));
+    @GetMapping("/user/{employeeId}")
+    public String showEmployeeInfo(@PathVariable long employeeId, Model model) {
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+        model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
         return "admin/user/user-info";
     }
 
-    @PostMapping("/user/update")
-    public String updateEmployee(@ModelAttribute Employee updateEmployee, BindingResult bindingResult, @ModelAttribute User updateUser, Model model) {
+    @PostMapping("/user/{employeeId}")
+    public String updateEmployee(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult,
+                                 @PathVariable long employeeId, Model model) {
         boolean error = false;
         HashMap<String, String> errors = new HashMap<>();
-        if (updateUser != null) {
-            if (userService.findByLogin(updateUser.getLogin()).isPresent()) {
-                if (!userService.findByLogin(updateUser.getLogin()).get().getUsername().equals(updateUser.getLogin())) {
-                    errors.put("loginExist", "Użytkownik o takim loginie już istnieje");
+        if (employee.getUser() != null) {
+            if (userService.findByEmployeeId(employeeId).isPresent()) {
+                if (!userService.findByEmployeeId(employeeId).get().getLogin().equals(employee.getUser().getLogin())) {
+                    if (userService.findByLogin(employee.getUser().getLogin()).isPresent()) {
+                        errors.put("loginExist", "Użytkownik o takim loginie już istnieje");
+                        error = true;
+                    }
+                }
+            }
+            if (employee.getUser().getLogin() != null) {
+                if (employee.getUser().getLogin().length() < 2) {
+                    errors.put("loginEmpty", "Pole wymagane");
                     error = true;
                 }
+
             }
             if (bindingResult.hasErrors()) {
                 error = true;
             }
             if (error) {
+                model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+                model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
                 model.addAttribute("uniqueErrors", errors);
                 return "admin/user/user-info";
             }
-            if (userService.findByEmployeeId(updateEmployee.getId()).isPresent()) {
-                User user = userService.findByEmployeeId(updateEmployee.getId()).get();
-                userService.updateLoginForId(updateUser.getLogin(), user.getId());
+            if (userService.findByEmployeeId(employee.getId()).isPresent()) {
+                User updateUser = userService.findByEmployeeId(employee.getId()).get();
+                userService.updateLoginForId(employee.getUser().getLogin(), updateUser.getId());
             }
         } else {
-            if (employeeService.findByCardNumber(updateEmployee.getCardNumber()).isPresent()) {
-                if (!employeeService.findByCardNumber(updateEmployee.getCardNumber()).get().getCardNumber().equals(updateEmployee.getCardNumber())) {
+            if (employeeService.findByCardNumber(employee.getCardNumber()).isPresent()) {
+                if (!employeeService.findByCardNumber(employee.getCardNumber()).get().getCardNumber().equals(employee.getCardNumber())) {
                     errors.put("cardNumberExist", "Podany numer karty istnieje w systemie");
                     error = true;
                 }
@@ -141,16 +153,18 @@ public class AdminController {
                 error = true;
             }
             if (error) {
+                model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+                model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
                 model.addAttribute("uniqueErrors", errors);
                 return "admin/user/user-info";
             }
         }
-        if (employeeService.findById(updateEmployee.getId()).isPresent()) {
-            Employee employee = employeeService.findById(updateEmployee.getId()).get();
-            employee.setFirstName(updateEmployee.getFirstName());
-            employee.setLastName(updateEmployee.getLastName());
-            employee.setCardNumber(updateEmployee.getCardNumber());
-            employeeService.save(employee);
+        if (employeeService.findById(employee.getId()).isPresent()) {
+            Employee updateEmployee = employeeService.findById(employee.getId()).get();
+            updateEmployee.setFirstName(employee.getFirstName());
+            updateEmployee.setLastName(employee.getLastName());
+            updateEmployee.setCardNumber(employee.getCardNumber());
+            employeeService.save(updateEmployee);
         }
         return "redirect:/admin/users";
     }
@@ -212,6 +226,7 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/role-grant")
     public String grantRoleForm(@PathVariable long employeeId, Model model) {
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
         model.addAttribute("roles", roleService.findRoleToGrantByEmployeeId(employeeId));
         model.addAttribute("role", new Role());
         return "admin/role/grant";
@@ -225,6 +240,7 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/role-delete")
     public String deleteRoleForm(Model model, @PathVariable long employeeId) {
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
         model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
         model.addAttribute("role", new Role());
         return "admin/role/delete";

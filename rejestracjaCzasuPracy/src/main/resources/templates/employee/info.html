@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Rejestracja czas pracy</title>
 </head>
 <body>
-<h1>Witaj <span th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></span></h1>
-<form method="post" th:action="@{/employee/{cardNumber}(cardNumber = ${employee.getCardNumber()})}">
-    <span th:if="${employee.isWork()} == true"><input type="submit" value="KONIEC"></span>
-    <span th:unless="${employee.isWork()} == true"><input type="submit" value="START"></span>
-    <button><a th:href="@{/employee}">Powrót </a></button>
-</form>
+<div class="container">
+    <br>
+    <br>
+    <h1>Witaj <span th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></span></h1>
+    <br>
+    <form method="post" th:action="@{/employee/{cardNumber}(cardNumber = ${employee.getCardNumber()})}">
+        <div class="form-group">
+            <span th:if="${employee.isWork()} == true"><input class="btn btn-danger  btn-lg btn-block" type="submit"
+                                                              value="KONIEC PRACY"></span>
+            <span th:unless="${employee.isWork()} == true"><input class="btn btn-success btn-lg btn-block"
+                                                                  type="submit" value="ROZPOCZĘCIE PRACY"></span>
+        </div>
+        <a class="btn btn-secondary btn-lg btn-block" th:href="@{/employee}">POWRÓT</a>
+    </form>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

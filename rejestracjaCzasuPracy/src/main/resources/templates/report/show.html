@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Raport</title>
 </head>
 <body>
-<h2>Raport wejść pracowników</h2>
-<form method="post" th:action="@{/report/show}">
-    <label th:for="employeeId">Pracownik: </label>
-    <select name="employeeId" id="employeeId" required>
-        <option value="" selected disabled hidden>Wybierz pracownika</option>
-        <option th:each="employee : ${employeelist}" th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}" th:value="${employee.getId()}"></option>
-    </select>
-    <label for="dateStart">Od:</label>
-    <input type="date" required id="dateStart" name="dateStart">
-    <label for="dateEnd">Od:</label>
-    <input type="date" required id="dateEnd" name="dateEnd">
-    <input type="submit" value="Szukaj">
-</form>
-<div>
-    <table>
-        <tr>
-            <th>Pracownik</th>
-            <th>Data i godina</th>
-            <th>Akcja</th>
-        </tr>
-        <tr th:each="event : ${eventList}">
-            <td th:text="${event.getEmployee().getFirstName().concat(' ').concat(event.getEmployee().getLastName())}"></td>
-            <td th:text="${#temporals.format(event.getDate(),'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${event.getEventName()}"></td>
-        </tr>
-    </table>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <br>
+    <h2>Raport wejść/wyjść pracownika</h2>
+    <br>
+    <form method="post" th:action="@{/report/show}">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label th:for="employeeId">Pracownik: </label>
+                <select class="custom-select" name="employeeId" id="employeeId" required>
+                    <option value="" selected disabled hidden>Wybierz pracownika</option>
+                    <option th:each="employee : ${employeeList}"
+                            th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"
+                            th:value="${employee.getId()}"></option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="dateStart">Od:</label>
+                <input type="date" class="form-control" id="dateStart" name="dateStart" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="dateEnd">Od:</label>
+                <input type="date" class="form-control" id="dateEnd" name="dateEnd" required>
+            </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Szukaj">
+    </form>
+    <br>
+    <div th:if="${eventList} != null">
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th>Pracownik</th>
+                <th>Data i godina</th>
+                <th>Akcja</th>
+            </tr>
+            </thead>
+            <tr th:each="event : ${eventList}">
+                <td th:text="${event.getEmployee().getFirstName().concat(' ').concat(event.getEmployee().getLastName())}"></td>
+                <td th:text="${#temporals.format(event.getDate(),'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${event.getEventName()}"></td>
+            </tr>
+        </table>
+    </div>
 </div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

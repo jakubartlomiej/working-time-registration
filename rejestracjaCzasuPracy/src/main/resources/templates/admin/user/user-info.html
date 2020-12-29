@@ -1,83 +1,146 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:include="fragments/header :: header"></th:block>
     <meta charset="UTF-8">
     <title>Informacje o użytkowniku</title>
 </head>
 <body>
-<h1>Test</h1>
-<form method="post" th:object="${employee}" th:action="@{'/admin/user/update'}">
-    <table>
-        <tr>
-            <td>Id:</td>
-            <td><input type="text" th:field="*{id}" readonly></td>
-        </tr>
-        <tr>
-            <td>Imie:</td>
-            <td><input type="text" th:field="*{firstName}"></td>
-            <td th:errors="*{firstName}"></td>
-        </tr>
-        <tr>
-            <td>Nazwisko:</td>
-            <td><input type="text" th:field="*{lastName}"></td>
-            <td th:errors="*{lastName}"></td>
-        </tr>
-        <tr>
-            <td>Numer karty:</td>
-            <td><input type="text" th:field="*{cardNumber}"></td>
-            <td th:errors="*{cardNumber}"></td>
-            <span th:if="${uniqueErrors}">
-        <td th:if="${uniqueErrors.containsKey('cardNumberExist')}"
-            th:text="${uniqueErrors.get('cardNumberExist')}"></td>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <br>
+    <h2>Edycja danych:</h2>
+    <br>
+    <div class="form-section">
+        <form method="post" th:object="${employee}" th:action="@{/admin/user/{id} (id=${employee.getId()})}">
+            <div th:if="${#fields.hasErrors('*')}">
+                <div th:each="err : ${#fields.errors()}" th:text="${err}"></div>
+            </div>
+            <div class="form-group row">
+                <label th:for="id" class="col-sm-2 col-form-label">ID:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{id}" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="firstName" class="col-sm-2 col-form-label">Imie:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{firstName}" class="form-control">
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="lastName" class="col-sm-2 col-form-label">Nazwisko:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{lastName}" class="form-control">
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="cardNumber" class="col-sm-2 col-form-label">Numer karty:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{cardNumber}" class="form-control">
+                    <div th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}"></div>
+                    <span th:if="${uniqueErrors}">
+        <span th:if="${uniqueErrors.containsKey('cardNumberExist')}"
+              th:text="${uniqueErrors.get('cardNumberExist')}"></span>
         </span>
-        </tr>
-        <tr>
-            <td><label th:for="*{active}">Karta aktywna: </label></td>
-            <td th:if="*{isActive()}">TAK</td>
-            <td th:unless="*{isActive()}">NIE</td>
-        </tr>
-        <span th:if="${employee.getUser()} != null" th:object="${user}">
-            <tr>
-                <td><label th:for="*{login}">Login: </label></td>
-                <td>
-                    <input type="text" th:field="*{login}">
-                </td>
-                <td th:error="*{login}"></td>
-                <span th:if="${uniqueErrors}">
-            <td th:if="${uniqueErrors.containsKey('loginExist')}" th:text="${uniqueErrors.get('loginExist')}"></td>
-                </span>
-            </tr>
-            <tr>
-                <td>Uprawnienia:</td>
-                <td th:if="${user}!=null">
-                    <ul th:each="role : ${user.getRoles()}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="isActive" class="col-sm-2 col-form-label">Karta aktywna:</label>
+                <div class="col-sm-10">
+                    <span th:if="*{isActive()}">TAK</span>
+                    <span th:unless="*{isActive()}">NIE</span>
+                </div>
+            </div>
+            <div th:if="${employee.getUser()} != null">
+                <div class="form-group row">
+                    <label th:for="login" class="col-sm-2 col-form-label">Login:</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{user.login}" class="form-control">
+                        <div th:if="${#fields.hasErrors('user.login')}" th:errors="*{user.login}"></div>
+                        <span th:if="${uniqueErrors}">
+                <span th:if="${uniqueErrors.containsKey('loginExist')}"
+                      th:text="${uniqueErrors.get('loginExist')}"></span>
+            </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label th:for="roles" class="col-sm-2 col-form-label">Uprawnienia:</label>
+                    <div class="col-sm-10">
+              <span th:if="${user}!=null">
+                  <ul th:each="role : ${user.getRoles()}">
                         <li th:text="${role.getSimplifiedRoleName()}"></li>
                     </ul>
-                </td>
-            </tr>
-        </span>
-    </table>
-    <input type="submit" value="Zapisz">
-</form>
-<a th:href="@{/admin/users}">
-    <button>Powrót</button>
-</a>
-<a th:href="@{/admin/user/{id}/card-disabled (id = ${employee.getId()})}" th:if="${employee.isActive()}">
-    <button>Zablokuj kartę</button>
-</a>
-<a th:href="@{/admin/user/{id}/card-enabled (id = ${employee.getId()})}" th:unless="${employee.isActive()}">
-    <button>Odblokuj kartę</button>
-</a>
-<span th:if="${employee.getUser() == null}">
-            <a th:href="@{/admin/user/{id}/add-login (id = ${employee.getId()})}"><button>Utwórz login</button></a>
-</span>
-<span th:unless="${employee.getUser() == null}">
-            <a th:href="@{/admin/user/{id}/password (id = ${employee.getId()})}"><button>Resetuj hasło</button></a>
-            <a th:if="${employee.getUser().getRoles().size()} < 2"
-               th:href="@{/admin/user/{id}/role-grant (id = ${employee.getId()})}"><button>Nadaj uprawnienia</button></a>
-            <a th:if="!${employee.getUser().getRoles().isEmpty()}"
-               th:href="@{/admin/user/{id}/role-delete (id = ${employee.getId()})}"><button>Zabierz uprawnienia</button></a>
-            <a th:href="@{/admin/user/{id}/user-delete (id = ${employee.getId()})}"><button>Kasuj konto logowania</button></a>
-</span>
+              </span>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="optionsDesc">
+                    <p>Dodatkowe opcje: </p>
+                </div>
+                <div class="optionsButton">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group"
+                             th:if="${employee.isActive()}">
+                            <a th:href="@{/admin/user/{id}/card-disabled (id = ${employee.getId()})}">
+                                <button type="button" class="btn btn-dark">Zablokuj kartę</button>
+                            </a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="First group"
+                             th:unless="${employee.isActive()}">
+                            <a th:href="@{/admin/user/{id}/card-enabled (id = ${employee.getId()})}">
+                                <button type="button" class="btn btn-dark">Odblokuj kartę</button>
+                            </a>
+                        </div>
+                        <th:block th:if="${employee.getUser() == null}">
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                <a th:href="@{/admin/user/{id}/add-login (id = ${employee.getId()})}">
+                                    <button type="button" class="btn btn-dark">Utwórz login</button>
+                                </a>
+                            </div>
+                        </th:block>
+                        <th:block th:unless="${employee.getUser() == null}">
+                            <div class="btn-group mr-2" role="group" aria-label="Third group">
+                                <a th:href="@{/admin/user/{id}/password (id = ${employee.getId()})}">
+                                    <button type="button" class="btn btn-dark">Zresetuj hasło</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group"
+                                 th:if="${employee.getUser().getRoles().size()} < 2">
+                                <a th:href="@{/admin/user/{id}/role-grant (id = ${employee.getId()})}">
+                                    <button type="button" class="btn btn-dark">Nadaj uprawnienia</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group"
+                                 th:if="!${employee.getUser().getRoles().isEmpty()}">
+                                <a th:href="@{/admin/user/{id}/role-delete (id = ${employee.getId()})}">
+                                    <button type="button" class="btn btn-dark">Zabierz uprawnienia</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group">
+                                <a th:href="@{/admin/user/{id}/user-delete (id = ${employee.getId()})}">
+                                    <button type="button" class="btn btn-dark">Kasuj konto logowania</button>
+                                </a>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="float-right">
+                <input class="btn btn-primary" type="submit" value="Zapisz">
+                <a class="btn btn-primary" th:href="@{/admin/users}">Powrót</a>
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+<div>
+    <span th:each="err : ${#fields.errors('*')}" th:text="${err}"></span>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>
