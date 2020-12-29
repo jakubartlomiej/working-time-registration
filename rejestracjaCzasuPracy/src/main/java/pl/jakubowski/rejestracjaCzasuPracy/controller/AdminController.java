@@ -226,6 +226,7 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/role-grant")
     public String grantRoleForm(@PathVariable long employeeId, Model model) {
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
         model.addAttribute("roles", roleService.findRoleToGrantByEmployeeId(employeeId));
         model.addAttribute("role", new Role());
         return "admin/role/grant";
@@ -239,6 +240,7 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}/role-delete")
     public String deleteRoleForm(Model model, @PathVariable long employeeId) {
+        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
         model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
         model.addAttribute("role", new Role());
         return "admin/role/delete";
