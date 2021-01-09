@@ -36,7 +36,7 @@ public class EmployeeController {
         if (employee.isPresent() && employee.get().isActive()) {
             return "redirect:/employee/" + cardNumber;
         } else {
-            model.addAttribute("cardNotFound", "Brak przypisanej karty w systemie");
+            model.addAttribute("cardNotFound", "Brak przypisanej karty w systemie lub karta zablokowana!");
             return "employee/employee";
         }
     }
