@@ -1,5 +1,7 @@
 package pl.jakubowski.rejestracjaCzasuPracy.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import pl.jakubowski.rejestracjaCzasuPracy.service.EmployeeService;
 import pl.jakubowski.rejestracjaCzasuPracy.service.RoleService;
 import pl.jakubowski.rejestracjaCzasuPracy.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collections;
@@ -102,7 +105,11 @@ public class AdminController {
     }
 
     @GetMapping("/user/{employeeId}")
-    public String showEmployeeInfo(@PathVariable long employeeId, Model model) {
+    public String showEmployeeInfo(@PathVariable long employeeId, Model model, HttpServletResponse response) {
+        if(!employeeService.findById(employeeId).isPresent()){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "error/error";
+        }
         model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
         model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
         return "admin/user/user-info";
