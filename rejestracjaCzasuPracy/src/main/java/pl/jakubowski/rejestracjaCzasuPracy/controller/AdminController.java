@@ -1,7 +1,5 @@
 package pl.jakubowski.rejestracjaCzasuPracy.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -106,13 +105,14 @@ public class AdminController {
 
     @GetMapping("/user/{employeeId}")
     public String showEmployeeInfo(@PathVariable long employeeId, Model model, HttpServletResponse response) {
-        if(!employeeService.findById(employeeId).isPresent()){
+        if (!employeeService.findById(employeeId).isPresent()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return "error/error";
+        } else {
+            model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+            model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
+            return "admin/user/user-info";
         }
-        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
-        model.addAttribute("user", userService.findByEmployeeId(employeeId).orElse(new User()));
-        return "admin/user/user-info";
     }
 
     @PostMapping("/user/{employeeId}")
@@ -177,10 +177,15 @@ public class AdminController {
     }
 
     @GetMapping("/user/{employeeId}/add-login")
-    public String addLoginForm(@PathVariable long employeeId, Model model) {
-        model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
-        model.addAttribute("user", new User());
-        return "admin/user/add-login";
+    public String addLoginForm(@PathVariable long employeeId, Model model, HttpServletResponse response) {
+        if (!employeeService.findById(employeeId).isPresent()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "error/error";
+        } else {
+            model.addAttribute("employee", employeeService.findById(employeeId).orElseThrow(() -> new RuntimeException("Pracwonk nie znaleziony")));
+            model.addAttribute("user", new User());
+            return "admin/user/add-login";
+        }
     }
 
     @PostMapping("user/{employeeId}/add-login")
