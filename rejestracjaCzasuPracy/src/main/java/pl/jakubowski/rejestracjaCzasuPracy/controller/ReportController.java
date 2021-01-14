@@ -35,13 +35,19 @@ public class ReportController {
     @PostMapping("/show")
     public String submitShowReport(@RequestParam long employeeId, @RequestParam String dateStart, @RequestParam String dateEnd, Model model) {
         model.addAttribute("employeeList", employeeService.findAll());
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+        DateTimeFormatter formatterStartDay = new DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM-dd[ HH:mm:ss]")
                 .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                 .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
                 .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                 .toFormatter();
-        model.addAttribute("eventList", eventService.findByEmployeeIdAndDateBetween(employeeId, LocalDateTime.parse(dateStart, formatter), LocalDateTime.parse(dateEnd, formatter)));
+        DateTimeFormatter formatterEndDay = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd[ HH:mm:ss]")
+                .parseDefaulting(ChronoField.HOUR_OF_DAY, 23)
+                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 59)
+                .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 59)
+                .toFormatter();
+        model.addAttribute("eventList", eventService.findByEmployeeIdAndDateBetween(employeeId, LocalDateTime.parse(dateStart, formatterStartDay), LocalDateTime.parse(dateEnd, formatterEndDay)));
         return "report/show";
     }
 }
