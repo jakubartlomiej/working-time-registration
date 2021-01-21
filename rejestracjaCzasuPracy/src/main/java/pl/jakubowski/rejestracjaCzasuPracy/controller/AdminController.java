@@ -258,7 +258,7 @@ public class AdminController {
         return "admin/role/delete";
     }
 
-    @PostMapping("/user/{employeeId}/role-delete")
+    @DeleteMapping("/user/{employeeId}/role-delete")
     public String submitDeleteRole(@PathVariable long employeeId, Role role) {
         userService.deleteRole(role, employeeId);
         return "redirect:/admin/user/" + employeeId;
