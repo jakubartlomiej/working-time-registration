@@ -57,19 +57,17 @@ public class UserService {
         if (userRepo.findByEmployeeId(employeeId).isPresent()) {
             User user = userRepo.findByEmployeeId(employeeId).get();
             if (roleRepo.findById(role.getId()).isPresent()) {
-                role = roleRepo.findById(role.getId()).get();
-                user.getRoles().add(role);
+                user.getRoles().add(roleRepo.findById(role.getId()).get());
                 userRepo.save(user);
             }
         }
     }
 
-    public void deleteRole(Role role, long emloyeeId) {
-        if (userRepo.findByEmployeeId(emloyeeId).isPresent()) {
-            User user = userRepo.findByEmployeeId(emloyeeId).get();
+    public void deleteRole(Role role, long employeeId) {
+        if (userRepo.findByEmployeeId(employeeId).isPresent()) {
+            User user = userRepo.findByEmployeeId(employeeId).get();
             if (roleRepo.findById(role.getId()).isPresent()) {
-                role = roleRepo.findById(role.getId()).get();
-                user.getRoles().remove(role);
+                user.getRoles().remove(roleRepo.findById(role.getId()).get());
                 userRepo.save(user);
             }
         }
