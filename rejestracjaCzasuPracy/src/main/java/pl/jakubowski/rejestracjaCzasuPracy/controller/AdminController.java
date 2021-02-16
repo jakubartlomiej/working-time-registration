@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,7 +32,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public String getUserList(Model model) {
+    public String getEmployeeList(Model model) {
         model.addAttribute("employeesList", employeeService.findAll());
         return "admin/user/users";
     }
@@ -258,7 +257,7 @@ public class AdminController {
         return "admin/role/delete";
     }
 
-    @DeleteMapping("/user/{employeeId}/role-delete")
+    @PostMapping("/user/{employeeId}/role-delete")
     public String submitDeleteRole(@PathVariable long employeeId, Role role) {
         userService.deleteRole(role, employeeId);
         return "redirect:/admin/user/" + employeeId;
