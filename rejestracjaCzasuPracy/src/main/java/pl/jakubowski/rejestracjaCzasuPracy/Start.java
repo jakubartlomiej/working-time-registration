@@ -4,7 +4,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.Role;
 import pl.jakubowski.rejestracjaCzasuPracy.entity.User;
-import pl.jakubowski.rejestracjaCzasuPracy.service.EmployeeService;
 import pl.jakubowski.rejestracjaCzasuPracy.service.RoleService;
 import pl.jakubowski.rejestracjaCzasuPracy.service.UserService;
 
