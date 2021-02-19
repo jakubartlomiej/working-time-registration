@@ -11,6 +11,7 @@ import pl.jakubowski.rejestracjaCzasuPracy.entity.Event;
 import pl.jakubowski.rejestracjaCzasuPracy.service.EmployeeService;
 import pl.jakubowski.rejestracjaCzasuPracy.service.EventService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -42,9 +43,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee/{cardNumber}")
-    public String getEmployeeInfo(@PathVariable String cardNumber, Model model) {
-        model.addAttribute("employee", employeeService.findByCardNumber(cardNumber).orElseThrow(() -> new RuntimeException("Pracownik nie znaleziony")));
-        return "employee/info";
+    public String getEmployeeInfo(@PathVariable String cardNumber, Model model, HttpServletResponse response) {
+        if (employeeService.findByCardNumber(cardNumber).isPresent()) {
+            model.addAttribute("employee", employeeService.findByCardNumber(cardNumber).get());
+            return "employee/info";
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "error/error";
+        }
     }
 
     @PostMapping("/employee/{cardNumber}")
