@@ -47,7 +47,7 @@ public class ReportController {
                 .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 59)
                 .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 59)
                 .toFormatter();
-        model.addAttribute("eventList", eventService.findByEmployeeIdAndDateBetween(employeeId, LocalDateTime.parse(dateStart, formatterStartDay), LocalDateTime.parse(dateEnd, formatterEndDay)));
+        model.addAttribute("eventList", eventService.findByEmployeeIdAndDateBetweenOrderByDateDesc(employeeId, LocalDateTime.parse(dateStart, formatterStartDay), LocalDateTime.parse(dateEnd, formatterEndDay)));
         return "report/show";
     }
 }
