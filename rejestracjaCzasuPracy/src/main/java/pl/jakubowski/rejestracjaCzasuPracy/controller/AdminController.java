@@ -220,7 +220,7 @@ public class AdminController {
     }
 
     @PostMapping("/user/{employeeId}/password")
-    public String subminPasswordReset(@RequestParam @Min(value = 8, message = "Minimum 8 znaków") String newPassword, @PathVariable long employeeId, Model model) {
+    public String submitPasswordReset(@RequestParam @Min(value = 8, message = "Minimum 8 znaków") String newPassword, @PathVariable long employeeId, Model model) {
         if (newPassword.length() < 8) {
             model.addAttribute("error", "Minimum 8 znaków");
             model.addAttribute("user", userService.findByEmployeeId(employeeId).orElseThrow(() -> new RuntimeException("User nie znaleziony")));
