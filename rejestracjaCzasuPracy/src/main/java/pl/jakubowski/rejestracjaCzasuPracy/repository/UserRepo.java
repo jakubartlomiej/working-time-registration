@@ -18,6 +18,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "update User u set u.login = :login where u.id = :id")
-    int updateLoginForId(@Param("login") String login, @Param("id") long id);
+    void updateLoginForId(@Param("login") String login, @Param("id") long id);
 
 }
