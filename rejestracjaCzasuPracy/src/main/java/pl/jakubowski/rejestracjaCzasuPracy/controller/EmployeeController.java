@@ -58,11 +58,14 @@ public class EmployeeController {
         if (employeeService.findByCardNumber(cardNumber).isPresent()) {
             Employee employee = employeeService.findByCardNumber(cardNumber).get();
             String eventName = (employee.isWork()) ? "Wyjście" : "Wejście";
-            eventService.addEvent(new Event(employee, LocalDateTime.now(), eventName));
+            Event event = new Event();
+            event.setEmployee(employee);
+            event.setDate(LocalDateTime.now());
+            event.setEventName(eventName);
+            eventService.addEvent(event);
             employee.setWork(eventName.equalsIgnoreCase("Wejście"));
             employeeService.save(employee);
         }
         return "redirect:/employee";
     }
-
 }
