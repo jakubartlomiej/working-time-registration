@@ -17,6 +17,8 @@ Employee with role admin can create new account employee, blocking card, change 
 
 
 ## Presentation of the application
+#### Scan
+![scan](img/scan.png)
 #### Confirm event
 ![confirm-event](img/confirm%20event.png)
 #### Create new account
