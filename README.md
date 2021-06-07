@@ -16,5 +16,14 @@ Employee with role user can login to application and show reports.
 Employee with role admin can create new account employee, blocking card, change card number when is lose, create new user.
 
 
-## Inspiration
-
+## Presentation of the application
+#### Confirm event
+![confirm-event](img/confirm%20event.png)
+#### Create new account
+![new-account](img/new%20account.png)
+#### Edit account
+![edit-account](img/edit%20account.png)
+#### Employee list
+![employee-list](img/employee%20list.png)
+#### Report
+![report](img/report.png)
